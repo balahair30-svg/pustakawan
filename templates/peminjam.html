@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4">
+    <!-- Form Tambah Buku -->
+    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-600 h-fit">
+        <h3 class="text-xl font-bold text-green-800 mb-4">Tambah Buku Baru</h3>
+        <form action="{{ url_for('add_book') }}" method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Judul Buku</label>
+                <input type="text" name="title" required class="mt-1 w-full px-3 py-2 border rounded-md focus:ring-green-500 focus:border-green-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Penulis</label>
+                <input type="text" name="author" required class="mt-1 w-full px-3 py-2 border rounded-md focus:ring-green-500 focus:border-green-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Stok Awal</label>
+                <input type="number" name="stock" min="1" required class="mt-1 w-full px-3 py-2 border rounded-md focus:ring-green-500 focus:border-green-500 outline-none">
+            </div>
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md font-medium transition">Simpan Buku</button>
+        </form>
+    </div>
+
+    <!-- Tabel Data Buku & Transaksi -->
+    <div class="lg:col-span-2 space-y-8">
+        <!-- Daftar Buku -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold text-green-800 mb-4">Katalog Buku</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-green-100 text-green-800">
+                            <th class="p-3 border-b-2 border-green-200">Judul</th>
+                            <th class="p-3 border-b-2 border-green-200">Penulis</th>
+                            <th class="p-3 border-b-2 border-green-200 text-center">Stok</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in books %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 border-b">{{ book['title'] }}</td>
+                            <td class="p-3 border-b">{{ book['author'] }}</td>
+                            <td class="p-3 border-b text-center font-bold">{{ book['stock'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Daftar Transaksi -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold text-green-800 mb-4">Riwayat Peminjaman</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-green-100 text-green-800">
+                            <th class="p-3 border-b-2 border-green-200">Peminjam</th>
+                            <th class="p-3 border-b-2 border-green-200">Buku</th>
+                            <th class="p-3 border-b-2 border-green-200">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in borrowings %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 border-b">{{ item['username'] }}</td>
+                            <td class="p-3 border-b">{{ item['title'] }}</td>
+                            <td class="p-3 border-b">
+                                {% if item['status'] == 'dipinjam' %}
+                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-yellow-300">Dipinjam</span>
+                                {% else %}
+                                    <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-green-300">Dikembalikan</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

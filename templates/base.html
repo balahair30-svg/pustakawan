@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perpustakaan Hijau</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 text-gray-800 font-sans min-h-screen flex flex-col">
+    <!-- Navbar -->
+    {% if session.get('user_id') %}
+    <nav class="bg-green-700 text-white shadow-md">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold tracking-wide">Pustaka<span class="text-green-300">Hijau</span></a>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm border-r border-green-500 pr-4">Halo, <b>{{ session.get('username') }}</b> ({{ session.get('role')|capitalize }})</span>
+                <a href="{{ url_for('logout') }}" class="text-sm bg-green-800 hover:bg-green-900 px-4 py-2 rounded transition">Logout</a>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <!-- Menampilkan Pesan (Flash Messages) -->
+    <div class="container mx-auto mt-6 px-6">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 shadow-sm" role="alert">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Konten Utama -->
+    <main class="container mx-auto px-6 pb-8 flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-green-800 text-green-100 text-center py-4 mt-auto">
+        <p class="text-sm">&copy; 2026 Aplikasi Perpustakaan. Dibangun dengan Flask & Tailwind CSS.</p>
+    </footer>
+</body>
+</html>
